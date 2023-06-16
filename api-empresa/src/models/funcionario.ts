@@ -1,12 +1,16 @@
 import {
   Column,
   DataType,
+  ForeignKey,
   IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+import Departamento from "./departamento";
+import { Col } from "sequelize/types/utils";
+import Dependente from "./dependente";
 
 @Table({
   timestamps: true,
@@ -46,6 +50,13 @@ class Funcionario extends Model {
     type: DataType.INTEGER,
   })
   idade!: number;
+
+  @ForeignKey(() => Departamento)
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+  })
+  idDepartamentos!: number;
 }
 
 export default Funcionario;

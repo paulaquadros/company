@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import Funcionario from "../models/funcionario";
+import Dependente from "../models/dependente";
 
 const router: Router = Router();
 
@@ -51,6 +52,17 @@ router.delete(
     );
     await Funcionario.destroy({ where: { idFuncionarios } });
     return res.status(200).json(delFuncionarios);
+  }
+);
+
+router.get(
+  "/funcionarios/:idFuncionarios/dependentes",
+  async (req: Request, res: Response): Promise<Response> => {
+    const { idFuncionarios } = req.params;
+    const dependentes: Dependente[] = await Dependente.findAll({
+      where: { idFuncionarios },
+    });
+    return res.status(200).json(dependentes);
   }
 );
 
