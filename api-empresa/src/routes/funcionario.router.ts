@@ -1,13 +1,13 @@
+import { Dependentes } from "./../models/dependente";
+import { Funcionarios } from "./../models/funcionario";
 import express, { Request, Response, Router } from "express";
-import Funcionario from "../models/funcionario";
-import Dependente from "../models/dependente";
 
 const router: Router = Router();
 
 router.get(
   "/funcionarios",
   async (req: Request, res: Response): Promise<Response> => {
-    const allDeps: Funcionario[] = await Funcionario.findAll();
+    const allDeps: Funcionarios[] = await Funcionarios.findAll();
     return res.status(200).json(allDeps);
   }
 );
@@ -16,7 +16,7 @@ router.get(
   "/funcionarios/:id",
   async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
-    const funcionarios: Funcionario | null = await Funcionario.findByPk(id);
+    const funcionarios: Funcionarios | null = await Funcionarios.findByPk(id);
     return res.status(200).json(funcionarios);
   }
 );
@@ -24,7 +24,7 @@ router.get(
 router.post(
   "/funcionarios",
   async (req: Request, res: Response): Promise<Response> => {
-    const funcionarios: Funcionario = await Funcionario.create({
+    const funcionarios: Funcionarios = await Funcionarios.create({
       ...req.body,
     });
     return res.status(201).json(funcionarios);
@@ -35,8 +35,8 @@ router.put(
   "/funcionarios/:idFuncionarios",
   async (req: Request, res: Response): Promise<Response> => {
     const { idFuncionarios } = req.params;
-    await Funcionario.update({ ...req.body }, { where: { idFuncionarios } });
-    const upFuncionario: Funcionario | null = await Funcionario.findByPk(
+    await Funcionarios.update({ ...req.body }, { where: { idFuncionarios } });
+    const upFuncionario: Funcionarios | null = await Funcionarios.findByPk(
       idFuncionarios
     );
     return res.status(200).json(upFuncionario);
@@ -47,10 +47,10 @@ router.delete(
   "/funcionarios/:idFuncionarios",
   async (req: Request, res: Response): Promise<Response> => {
     const { idFuncionarios } = req.params;
-    const delFuncionarios: Funcionario | null = await Funcionario.findByPk(
+    const delFuncionarios: Funcionarios | null = await Funcionarios.findByPk(
       idFuncionarios
     );
-    await Funcionario.destroy({ where: { idFuncionarios } });
+    await Funcionarios.destroy({ where: { idFuncionarios } });
     return res.status(200).json(delFuncionarios);
   }
 );
@@ -59,7 +59,7 @@ router.get(
   "/funcionarios/:idFuncionarios/dependentes",
   async (req: Request, res: Response): Promise<Response> => {
     const { idFuncionarios } = req.params;
-    const dependentes: Dependente[] = await Dependente.findAll({
+    const dependentes: Dependentes[] = await Dependentes.findAll({
       where: { idFuncionarios },
     });
     return res.status(200).json(dependentes);

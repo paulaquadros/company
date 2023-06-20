@@ -1,42 +1,48 @@
 import {
-  Column,
-  IsUUID,
-  DataType,
-  Model,
-  PrimaryKey,
   Table,
+  Model,
+  Column,
+  DataType,
+  IsUUID,
+  PrimaryKey,
+  AllowNull,
+  Unique,
   ForeignKey,
+  HasOne,
+  Length,
+  HasMany,
 } from "sequelize-typescript";
-import Funcionario from "./funcionario";
+import { Projetos } from "./projeto";
+import { Funcionarios } from "./funcionario";
 
 @Table({
   timestamps: true,
-  paranoid: true,
 })
-class Departamento extends Model {
+export class Departamentos extends Model {
   @IsUUID("all")
   @PrimaryKey
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV1,
   })
-  idDepartamentos!: number;
+  id!: string;
 
+  @AllowNull(false)
+  @Unique
   @Column({
     type: DataType.STRING,
   })
-  nome!: string;
+  name!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
   sigla!: string;
 
-  @ForeignKey(() => Funcionario)
-  @Column({
-    type: DataType.UUID,
-  })
-  idFuncionarios!: number;
-}
+  @HasMany(() => Funcionarios)
+  departamentos!: Funcionarios[];
 
-export default Departamento;
+  @HasMany(() => Projetos)
+  projetos!: Projetos[];
+}

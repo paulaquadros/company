@@ -1,62 +1,74 @@
 import {
+  Table,
+  Model,
   Column,
   DataType,
-  ForeignKey,
-  IsEmail,
   IsUUID,
-  Model,
   PrimaryKey,
-  Table,
+  AllowNull,
+  IsEmail,
+  Unique,
+  ForeignKey,
+  BelongsTo,
+  HasMany,
 } from "sequelize-typescript";
-import Departamento from "./departamento";
-import { Col } from "sequelize/types/utils";
-import Dependente from "./dependente";
+import { Departamentos } from "./departamento";
+import { Dependentes } from "./dependente";
 
 @Table({
   timestamps: true,
-  paranoid: true,
 })
-class Funcionario extends Model {
+export class Funcionarios extends Model {
   @IsUUID("all")
   @PrimaryKey
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV1,
   })
-  idFuncionarios!: number;
+  id!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  nome!: string;
+  name!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
   endereco!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  telefone!: string;
+  fone!: string;
 
+  @AllowNull(false)
+  @Unique
   @IsEmail
   @Column({
     type: DataType.STRING,
   })
   email!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.INTEGER,
   })
   idade!: number;
 
-  @ForeignKey(() => Departamento)
+  @ForeignKey(() => Departamentos)
+  @AllowNull(false)
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
   })
-  idDepartamentos!: number;
-}
+  departamentoId!: string;
 
-export default Funcionario;
+  @BelongsTo(() => Departamentos)
+  departamento!: Departamentos;
+
+  @HasMany(() => Dependentes)
+  dependentes!: Dependentes[];
+}

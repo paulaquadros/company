@@ -1,43 +1,47 @@
 import {
+  Table,
+  Model,
   Column,
   DataType,
-  ForeignKey,
   IsUUID,
-  Model,
   PrimaryKey,
-  Table,
+  AllowNull,
+  ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
-import Funcionario from "./funcionario";
+import { Funcionarios } from "./funcionario";
 
 @Table({
   timestamps: true,
-  paranoid: true,
 })
-class Dependente extends Model {
+export class Dependentes extends Model {
   @IsUUID("all")
   @PrimaryKey
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV1,
   })
-  idDependentes!: number;
+  id!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  nome!: string;
+  name!: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.INTEGER,
   })
   idade!: number;
 
-  @ForeignKey(() => Funcionario)
+  @ForeignKey(() => Funcionarios)
+  @AllowNull(false)
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
   })
-  idFuncionarios!: number;
-}
+  funcionarioId!: string;
 
-export default Dependente;
+  @BelongsTo(() => Funcionarios)
+  Funcionario!: Funcionarios;
+}

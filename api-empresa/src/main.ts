@@ -10,16 +10,14 @@ Connection.sync() //sincronizando o banco de dados com o sequelize
     process.exit(1);
   });
 
-const start = async (): Promise<void> => {
-  //iniciando o servidor
-  try {
-    new Api().server.listen(3000, () => {
-      console.log("Server started on port 3000");
-    });
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-};
+const server = new Api();
 
-void start();
+try {
+  server.bootstrap().then((server) => {
+    console.info(`API Empresa rodando.`);
+  });
+} catch (error) {
+  console.error("Server failed to start.");
+  console.error(error);
+  process.exit(1);
+}

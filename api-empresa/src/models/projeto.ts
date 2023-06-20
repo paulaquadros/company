@@ -1,45 +1,49 @@
 import {
+  Table,
+  Model,
   Column,
   DataType,
-  ForeignKey,
-  IsDate,
   IsUUID,
-  Model,
   PrimaryKey,
-  Table,
+  AllowNull,
+  Unique,
+  ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
-import Departamento from "./departamento";
+import { Departamentos } from "./departamento";
 
 @Table({
   timestamps: true,
-  paranoid: true,
 })
-class Projeto extends Model {
+export class Projetos extends Model {
   @IsUUID("all")
   @PrimaryKey
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV1,
   })
-  idProjetos!: number;
+  id!: string;
 
+  @AllowNull(false)
+  @Unique
   @Column({
     type: DataType.STRING,
   })
   nome!: string;
 
-  @IsDate
+  @AllowNull(false)
   @Column({
-    type: DataType.DATE,
+    type: DataType.DATEONLY,
   })
   dataFinalizacao!: Date;
 
-  @ForeignKey(() => Departamento)
+  @ForeignKey(() => Departamentos)
+  @AllowNull(false)
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
   })
-  idDepartamentos!: number;
-}
+  departamentoId!: string;
 
-export default Projeto;
+  @BelongsTo(() => Departamentos)
+  departamento!: Departamentos;
+}
